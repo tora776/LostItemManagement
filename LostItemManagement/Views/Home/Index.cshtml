@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<LostItemManagement.Models.Lost>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="container mt-4">
+    <h2>なくしものメモ</h2>
+    <p>紛失物・紛失した場所・紛失した詳細な場所を記録するためのアプリです。</p>
+
+    <!-- 検索フォーム -->
+    <div class="card p-3 mb-3">
+        <div class="d-flex align-items-center mb-2">
+            <button class="btn btn-primary search-button"></button>
+            <button class="btn btn-secondary"><i class="bi bi-plus-lg"></i></button>
+        </div>
+        <div class="mb-2">
+            <label for="lostItem" class="form-label">なくしたもの</label>
+            <input type="text" class="form-control" id="lostItem">
+        </div>
+        <div class="mb-2">
+            <label for="lostPlace" class="form-label">なくした場所</label>
+            <input type="text" class="form-control" id="lostPlace">
+        </div>
+        <div class="mb-2">
+            <label for="lostDetail" class="form-label">なくした詳細な場所</label>
+            <input type="text" class="form-control" id="lostDetail">
+        </div>
+    </div>
+
+    <!-- 検索結果テーブル -->
+    <div class="card p-3">
+        <div class="d-flex mb-2">
+            <button class="btn btn-secondary me-2"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-secondary"><i class="bi bi-bar-chart"></i></button>
+        </div>
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>チェック</th>
+                    <th>紛失ID</th>
+                    <th>なくした日付</th>
+                    <th>見つけた日付</th>
+                    <th>なくしたもの</th>
+                    <th>なくした場所</th>
+                    <th>なくした詳細な場所</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>@item.lostId</td>
+                        <td>@item.lostDate</td>
+                        <td>@item.foundDate</td>
+                        <td>@item.lostItem</td>
+                        <td>@item.lostPlace</td>
+                        <td>@item.lostDetailedPlace</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
