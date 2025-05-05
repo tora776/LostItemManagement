@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 @model List<LostItemManagement.Models.Lost>
+<script src="~/ts/index.js"></script>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -14,8 +15,8 @@
     <!-- 検索フォーム -->
     <div class="card p-3 mb-3">
         <div class="d-flex align-items-center mb-2">
-            <button class="btn btn-primary search-button"></button>
-            <button class="btn btn-secondary"><i class="bi bi-plus-lg"></i></button>
+            <button class="btn btn-primary search-button" id="search-button">検索</button>
+            <button class="btn btn-secondary" id="insert-button"><i class="bi bi-plus-lg"></i>追加</button>
         </div>
         <div class="mb-2">
             <label for="lostItem" class="form-label">なくしたもの</label>
@@ -34,8 +35,9 @@
     <!-- 検索結果テーブル -->
     <div class="card p-3">
         <div class="d-flex mb-2">
-            <button class="btn btn-secondary me-2"><i class="bi bi-pencil"></i></button>
-            <button class="btn btn-secondary"><i class="bi bi-bar-chart"></i></button>
+            <button class="btn btn-secondary me-2" id="update-button"><i class="bi bi-pencil">更新</i></button>
+            <button class="btn btn-secondary" id="delete-button"><i class="bi bi-bar-chart"></i>削除</button>
+            <button class="btn btn-secondary" id="found-button"><i class="bi bi-bar-chart"></i>発見ステータス変更</button>
         </div>
         <table class="table table-bordered text-center">
             <thead class="table-light">
@@ -52,9 +54,10 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                    int index = @Model.IndexOf(item); // インデックスを計算
                     <tr>
-                        <td><input type="checkbox"></td>
-                        <td>@item.lostId</td>
+                        <td><input type="checkbox" value=@item.lostId></td>
+                        <td>@(index + 1)</td>
                         <td>@item.lostDate</td>
                         <td>@item.foundDate</td>
                         <td>@item.lostItem</td>

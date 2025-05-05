@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "ES6",
+    "lib": ["ES2022", "dom"],
+    "outDir": "wwwroot/ts"
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "wwwroot/ts/**/*.ts"
+  ]
+}

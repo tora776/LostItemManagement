@@ -1,0 +1,57 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using LostItemManagement.Models;
+
+namespace LostItemManagement.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class IndexController : Controller
+    {
+
+        private readonly LostService _lostService;
+        public IndexController(LostService lostService)
+        {
+            _lostService = lostService;
+        }
+
+        [HttpPost("select")]
+        public IActionResult Select()
+        {
+            // 起動時処理のため、引数に空文字を渡す
+            string item = "";
+            string place = "";
+            string detailedPlace = "";
+            // 検索処理を実施
+            var items = _lostService.SelectLostService(item, place, detailedPlace);
+            // return View(items);
+            return Json(items);
+        }
+
+        [HttpPost("insert")]
+        public IActionResult Insert([FromBody] Lost lost)
+        {
+            _lostService.InsertLostService(lost);
+            // 起動時処理のため、引数に空文字を渡す
+            string item = "";
+            string place = "";
+            string detailedPlace = "";
+            // 検索処理を実施
+            var items = _lostService.SelectLostService(item, place, detailedPlace);
+            return Ok();
+        }
+
+        [HttpPut("update")]
+        public IActionResult Update([FromBody] Lost lost)
+        {
+            _lostService.UpdateLostService(lost);
+            return Ok();
+        }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            _lostService.DeleteLostService(id);
+            return Ok();
+        }
+    }
+}

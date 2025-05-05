@@ -1,3 +1,4 @@
+using LostItemManagement.Controllers;
 using LostItemManagement.Models;
 using Npgsql;
 
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 // DIƒRƒ“ƒeƒi“o˜^ˆ—
 builder.Services.AddSingleton<DatabaseContext>();
-builder.Services.AddScoped<LostRepository>();
+builder.Services.AddScoped<LostRepository>(); // LostRepository‚ğDIƒRƒ“ƒeƒi‚É“o˜^
+builder.Services.AddScoped<LostService>();    // LostService‚ğDIƒRƒ“ƒeƒi‚É“o˜^
 
 var app = builder.Build();
 

@@ -7,17 +7,22 @@ namespace LostItemManagement.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly LostRepository _repository;
+        private readonly LostService _service;
 
         public HomeController(ILogger<HomeController> logger, LostRepository repository)
         {
             _logger = logger;
-            _repository = repository;
+            _service = new LostService(repository);
         }
 
         public IActionResult Index()
         {
-            var items = _repository.GetLostItem();
+            // ‹N“®ˆ—‚Ì‚½‚ßAˆø”‚É‹ó•¶š‚ğ“n‚·
+            string item = "";
+            string place = "";
+            string detailedPlace = "";
+            // ŒŸõˆ—‚ğÀ{
+            var items = _service.SelectLostService(item, place, detailedPlace);
             return View(items);
         }
 
