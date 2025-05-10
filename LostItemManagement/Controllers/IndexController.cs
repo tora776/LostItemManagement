@@ -15,14 +15,27 @@ namespace LostItemManagement.Controllers
         }
 
         [HttpPost("select")]
-        public IActionResult Select()
+        public IActionResult Select([FromBody] Lost lost)
         {
-            // 起動時処理のため、引数に空文字を渡す
-            string item = "";
-            string place = "";
-            string detailedPlace = "";
+            // lostItemがnullの場合、空文字を代入する
+            if (lost.lostItem == null)
+            {
+                lost.lostItem = "";
+            }
+
+            // lostPlaceがnullの場合、空文字を代入する
+            if (lost.lostPlace == null)
+            {
+                lost.lostPlace = "";
+            }
+
+            // lostDetailedPlaceがnullの場合、空文字を代入する
+            if (lost.lostDetailedPlace == null)
+            {
+                lost.lostDetailedPlace = "";
+            }
             // 検索処理を実施
-            var items = _lostService.SelectLostService(item, place, detailedPlace);
+            var items = _lostService.SelectLostService(lost.lostItem, lost.lostPlace, lost.lostDetailedPlace);
             // return View(items);
             return Json(items);
         }
@@ -30,11 +43,13 @@ namespace LostItemManagement.Controllers
         [HttpPost("insert")]
         public IActionResult Insert([FromBody] Lost lost)
         {
-            _lostService.InsertLostService(lost);
+            _lostService.InsertLostService(lost);   
+
             // 起動時処理のため、引数に空文字を渡す
             string item = "";
             string place = "";
             string detailedPlace = "";
+
             // 検索処理を実施
             var items = _lostService.SelectLostService(item, place, detailedPlace);
             return Ok();

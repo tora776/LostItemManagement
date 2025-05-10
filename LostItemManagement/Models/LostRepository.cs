@@ -43,34 +43,37 @@ namespace LostItemManagement.Models
                             query += " AND lost_detailed_place = @LOST_DETAILED_PLACE";
                             cmd.Parameters.Add("@LOST_DETAILED_PLACE", NpgsqlTypes.NpgsqlDbType.Varchar).Value = lostDetailedPlace;
                         }
-                
 
+                    // 更新した検索条件をコマンドに再設定
+                    cmd.CommandText = query;
+
+                    // SQL文を実行
                     using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            items.Add(new Lost
                             {
-                                lostId = reader.GetInt32(0),
-                                userId = reader.GetInt32(1),
-                                lostFlag = reader.GetInt32(2),
-                                lostDate = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
-                                foundDate = reader.IsDBNull(4) ? null : reader.GetDateTime(4),
-                                lostItem = reader.IsDBNull(5) ? null : reader.GetString(5),
-                                lostPlace = reader.IsDBNull(6) ? null : reader.GetString(6),
-                                lostDetailedPlace = reader.IsDBNull(7) ? null : reader.GetString(7)
-                            });
+                            while (reader.Read())
+                            {
+                                items.Add(new Lost
+                                {
+                                    lostId = reader.GetInt32(0),
+                                    userId = reader.GetInt32(1),
+                                    lostFlag = reader.GetInt32(2),
+                                    lostDate = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
+                                    foundDate = reader.IsDBNull(4) ? null : reader.GetDateTime(4),
+                                    lostItem = reader.IsDBNull(5) ? null : reader.GetString(5),
+                                    lostPlace = reader.IsDBNull(6) ? null : reader.GetString(6),
+                                    lostDetailedPlace = reader.IsDBNull(7) ? null : reader.GetString(7)
+                                });
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error retrieving lost items: " + ex.Message);
-                }
-                finally
-                {
-                    conn.Close();
-                }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error retrieving lost items: " + ex.Message);
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
                 return items;
             
         }
