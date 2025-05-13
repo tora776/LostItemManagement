@@ -1,0 +1,43 @@
+﻿@model List<LostItemManagement.Models.Lost>
+
+@{
+    ViewData["Title"] = "Update Lost Items";
+}
+
+<div class="container mt-4">
+<h2>更新するデータ</h2>
+<form method="post" action="/Home/SaveUpdates">
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+            <tr>
+                <th>紛失ID</th>
+                <th>なくした日付</th>
+                <th>見つけた日付</th>
+                <th>なくしたもの</th>
+                <th>なくした場所</th>
+                <th>なくした詳細な場所</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td>@Model[i].lostId</td>
+                    <td>@Model[i].lostDate</td>
+                    <td>@Model[i].foundDate</td>
+                    <td>
+                        <input type="text" name="[@i].lostItem" value="@Model[i].lostItem" class="form-control" />
+                    </td>
+                    <td>
+                        <input type="text" name="[@i].lostPlace" value="@Model[i].lostPlace" class="form-control" />
+                    </td>
+                    <td>
+                        <input type="text" name="[@i].lostDetailedPlace" value="@Model[i].lostDetailedPlace" class="form-control" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">保存</button>
+</form>
+</div>

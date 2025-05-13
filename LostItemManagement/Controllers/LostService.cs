@@ -36,5 +36,9 @@ namespace LostItemManagement.Controllers
         {
             _repository.DeleteLostRepository(id);
         }
+        public List<Lost> SelectLostServiceByIds(List<int> lostIds)
+        {
+            return _repository.SelectLostByIds(lostIds);
+        }
     }
 }

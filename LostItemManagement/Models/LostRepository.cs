@@ -75,7 +75,6 @@ namespace LostItemManagement.Models
                         conn.Close();
                     }
                 return items;
-            
         }
 
         public void InsertLostRepository(Lost lost, int LostId)
@@ -115,14 +114,8 @@ namespace LostItemManagement.Models
             try
             {
                 conn.Open();
-                var query = "UPDATE losts SET user_id = @userId, lost_flag = @lostFlag, lost_date = @lostDate, found_date = @foundDate, " +
-                            "lost_item = @lostItem, lost_place = @lostPlace, lost_detailed_place = @lostDetailedPlace, update_date = CURRENT_TIMESTAMP " +
-                            "WHERE lost_id = @lostId";
+                var query = "UPDATE losts SET lost_item = @lostItem, lost_place = @lostPlace, lost_detailed_place = @lostDetailedPlace, update_date = CURRENT_TIMESTAMP WHERE lost_id = @lostId";
                 using var cmd = new NpgsqlCommand(query, (NpgsqlConnection?)conn);
-                cmd.Parameters.AddWithValue("userId", lost.userId);
-                cmd.Parameters.AddWithValue("lostFlag", lost.lostFlag);
-                cmd.Parameters.AddWithValue("lostDate", lost.lostDate ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("foundDate", lost.foundDate ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("lostItem", lost.lostItem ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("lostPlace", lost.lostPlace ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("lostDetailedPlace", lost.lostDetailedPlace ?? (object)DBNull.Value);
@@ -195,6 +188,46 @@ namespace LostItemManagement.Models
             }
             return maxLostId;
 
+        }
+        public List<Lost> SelectLostByIds(List<int> lostIds)
+        {
+            var query = "SELECT * FROM Losts WHERE lost_id = ANY(@LostIds)";
+            using var conn = _dbContext.CreateConnection();
+            var items = new List<Lost>();
+            using var cmd = new NpgsqlCommand(query, (NpgsqlConnection?)conn);
+
+            cmd.Parameters.AddWithValue("LostIds", NpgsqlTypes.NpgsqlDbType.Array | NpgsqlTypes.NpgsqlDbType.Integer, lostIds.ToArray());
+            
+            try
+            {
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        items.Add(new Lost
+                        {
+                            lostId = reader.GetInt32(0),
+                            userId = reader.GetInt32(1),
+                            lostFlag = reader.GetInt32(2),
+                            lostDate = reader.IsDBNull(3) ? null : reader.GetDateTime(3),
+                            foundDate = reader.IsDBNull(4) ? null : reader.GetDateTime(4),
+                            lostItem = reader.IsDBNull(5) ? null : reader.GetString(5),
+                            lostPlace = reader.IsDBNull(6) ? null : reader.GetString(6),
+                            lostDetailedPlace = reader.IsDBNull(7) ? null : reader.GetString(7)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error retrieving lost items: " + ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return items;
         }
     }
 }

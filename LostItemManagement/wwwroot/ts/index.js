@@ -50,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
         else {
             createTable(results);
         }
-        alert("紛失データを検索しました!");
     }));
 });
 // 追加ボタン押下時の処理
@@ -96,22 +95,61 @@ document.addEventListener("DOMContentLoaded", function () {
         location.reload();
     }));
 });
-let lostList = []; // 起動時に取得したデータを保持
-document.addEventListener("DOMContentLoaded", () => __awaiter(this, void 0, void 0, function* () {
+// 更新ボタン押下時の処理
+document.addEventListener("DOMContentLoaded", function () {
     var _a;
-    // 起動時にデータを取得
-    const response = yield fetch("/api/index/select", { method: "POST" });
-    lostList = yield response.json();
-    (_a = document.getElementById("update-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
-        var selectedItems = getCheckLostList();
-        console.log("Selected items:", selectedItems);
-    });
-}));
-// チェックボックスで選択された紛失物のリストを取得する関数
-function getCheckLostList() {
-    const checkedIds = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+    (_a = document.getElementById("update-button")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => __awaiter(this, void 0, void 0, function* () {
+        const selectedItems = getCheckLostId();
+        if (selectedItems.length === 0) {
+            alert("更新するデータを選択してください。");
+            return;
+        }
+        // サーバーに選択されたデータを送信
+        const response = yield fetch("/Home/Update", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedItems),
+        });
+        if (response.ok) {
+            window.location.href = "/Home/Update";
+        }
+        else {
+            console.error("Failed to send data to update page");
+            return;
+        }
+    }));
+});
+let lostList = []; // 起動時に取得したデータを保持
+// チェックボックスで選択された紛失物IDを取得する関数
+function getCheckLostId() {
+    // チェックボックスで選択された紛失物IDを取得
+    const checkedLostIds = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
         .map((checkbox) => parseInt(checkbox.value));
-    const selectedItems = lostList.filter((item) => checkedIds.includes(item.lostId));
+    return checkedLostIds;
+}
+// update対象のデータを取得する関数
+function getCheckLostList() {
+    // チェックボックスで選択された行を取得
+    const selectedRows = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+        .map((checkbox) => checkbox.closest("tr")); // チェックボックスの親行を取得
+    // 選択された行のデータを取得
+    const selectedItems = selectedRows.map((row) => {
+        const cells = row === null || row === void 0 ? void 0 : row.querySelectorAll("td"); // 行内のセルを取得
+        if (!cells)
+            return null;
+        return {
+            lostId: parseInt(cells[0].querySelector("input").value), // チェックボックスのvalue
+            userId: parseInt("1"), // TODO: ユーザーIDを取得する処理を追加
+            // lostFlag: parseInt(cells[3].textContent ? null: "1" || "0"),
+            lostDate: cells[2].textContent || "",
+            foundDate: cells[3].textContent || null,
+            lostItem: cells[4].textContent || "",
+            lostPlace: cells[5].textContent || "",
+            lostDetailedPlace: cells[6].textContent || "",
+        };
+    }).filter((item) => item !== null); // nullを除外
     return selectedItems;
 }
 // テーブルを初期化し、新規で取得したデータを表示する関数

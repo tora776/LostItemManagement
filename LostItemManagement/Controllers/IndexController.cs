@@ -56,8 +56,9 @@ namespace LostItemManagement.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update([FromBody] Lost lost)
+        public IActionResult GetUpdateData([FromBody] Lost lost)
         {
+            // TODO:updateの更新対象データを取得する
             _lostService.UpdateLostService(lost);
             return Ok();
         }

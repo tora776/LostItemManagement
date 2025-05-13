@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using LostItemManagement.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace LostItemManagement.Controllers
 {
@@ -26,6 +27,8 @@ namespace LostItemManagement.Controllers
             return View(items);
         }
 
+
+        // 削除予定
         public IActionResult Privacy()
         {
             return View();
@@ -36,5 +39,51 @@ namespace LostItemManagement.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        // 更新ボタン押下時チェックをつけたデータをセッションに保存
+        [HttpPost]
+        public IActionResult Update([FromBody] List<int> lostIds)
+        {
+            if (lostIds == null || !lostIds.Any())
+            {
+                // 選択されたデータがない場合、エラーメッセージを表示
+                ModelState.AddModelError("", "少なくとも1つのアイテムを選択してください。");
+                return BadRequest(ModelState);
+            }
+
+            // lostIdに基づいて紛失物データを取得
+            var lostItems = _service.SelectLostServiceByIds(lostIds);
+
+            // TempDataにデータを保存
+            TempData["SelectedItems"] = JsonConvert.SerializeObject(lostItems);
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult Update()
+        {
+            // TempDataから選択されたデータを取得
+            var selectedItemsJson = TempData["SelectedItems"] as string;
+            var selectedItems = string.IsNullOrEmpty(selectedItemsJson)
+                ? new List<Lost>()
+                : JsonConvert.DeserializeObject<List<Lost>>(selectedItemsJson);
+
+            // Update.cshtmlにデータを渡す
+            return View(selectedItems);
+        }
+
+        [HttpPost]
+        public IActionResult SaveUpdates(List<Lost> updatedItems)
+        {
+            foreach (var item in updatedItems)
+            {
+                _service.UpdateLostService(item);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
