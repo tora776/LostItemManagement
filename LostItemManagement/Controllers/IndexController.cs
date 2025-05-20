@@ -56,11 +56,13 @@ namespace LostItemManagement.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult GetUpdateData([FromBody] Lost lost)
+        public IActionResult GetUpdateData([FromBody] List<Lost> updatedItems)
         {
-            // TODO:updateの更新対象データを取得する
-            _lostService.UpdateLostService(lost);
-            return Ok();
+            foreach (var item in updatedItems)
+            {
+                _lostService.UpdateLostService(item);
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpDelete("delete/{id}")]

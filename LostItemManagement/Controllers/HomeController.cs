@@ -16,6 +16,11 @@ namespace LostItemManagement.Controllers
             _service = new LostService(repository);
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             // 起動時処理のため、引数に空文字を渡す
@@ -72,18 +77,5 @@ namespace LostItemManagement.Controllers
             // Update.cshtmlにデータを渡す
             return View(selectedItems);
         }
-
-        [HttpPost]
-        public IActionResult SaveUpdates(List<Lost> updatedItems)
-        {
-            foreach (var item in updatedItems)
-            {
-                _service.UpdateLostService(item);
-            }
-
-            return RedirectToAction("Index");
-        }
-
-
     }
 }

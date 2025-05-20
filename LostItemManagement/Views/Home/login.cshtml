@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "ログイン";
+}
+<script src="~/ts/login.js"></script>
+<h2>ログイン</h2>
+<div>
+    <form id="loginForm">
+        <div>
+            <label for="userId">ユーザーID:</label>
+            <input type="text" id="userId" name="userId" required />
+        </div>
+        <div>
+            <label for="password">パスワード:</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+        <button type="submit">ログイン</button>
+    </form>
+    <div id="loginError" style="color:red;display:none;">ログインに失敗しました。</div>
+</div>

@@ -117,6 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (response.ok) {
+            // update.cshtmlに遷移
             window.location.href = "/Home/Update";
         }
         else {
@@ -146,32 +147,6 @@ function getCheckLostId() {
         .map((checkbox) => parseInt((checkbox as HTMLInputElement).value));
     
     return checkedLostIds;
-}
-
-// update対象のデータを取得する関数
-function getCheckLostList() {
-    // チェックボックスで選択された行を取得
-    const selectedRows = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
-        .map((checkbox) => checkbox.closest("tr")); // チェックボックスの親行を取得
-
-    // 選択された行のデータを取得
-    const selectedItems: Lost[] = selectedRows.map((row) => {
-        const cells = row?.querySelectorAll("td"); // 行内のセルを取得
-        if (!cells) return null;
-
-        return {
-            lostId: parseInt((cells[0].querySelector("input") as HTMLInputElement).value), // チェックボックスのvalue
-            userId: parseInt("1"), // TODO: ユーザーIDを取得する処理を追加
-            // lostFlag: parseInt(cells[3].textContent ? null: "1" || "0"),
-            lostDate: cells[2].textContent || "",
-            foundDate: cells[3].textContent || null,
-            lostItem: cells[4].textContent || "",
-            lostPlace: cells[5].textContent || "",
-            lostDetailedPlace: cells[6].textContent || "",
-        };
-    }).filter((item): item is Lost => item !== null); // nullを除外
-
-    return selectedItems;
 }
 
 // テーブルを初期化し、新規で取得したデータを表示する関数

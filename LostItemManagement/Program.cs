@@ -4,6 +4,11 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ログ設定
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // コンソールにログを出力
+builder.Logging.AddDebug();   // デバッグ出力
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 // DIコンテナ登録処理
