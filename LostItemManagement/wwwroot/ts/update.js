@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         // サーバーに選択されたデータを送信
-        const response = yield fetch("/api/index/update", {
+        const response = yield fetch("/Home/Update/update/saveupdates", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

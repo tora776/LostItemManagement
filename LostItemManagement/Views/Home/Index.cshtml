@@ -53,11 +53,13 @@
                     <tr>
                         <td><input type="checkbox" value=@item.lostId></td>
                         <td>@(index + 1)</td>
-                        <td>@item.lostDate</td>
-                        <td>@item.foundDate</td>
+                        <td>@(item.lostDate?.ToString("yyyy/MM/dd") ?? "")</td>
+                        <td>@(item.foundDate?.ToString("yyyy/MM/dd") ?? "")</td>
                         <td>@item.lostItem</td>
                         <td>@item.lostPlace</td>
                         <td>@item.lostDetailedPlace</td>
+                        <td><input type="hidden" value="@item.lostId" /></td>
+                        <td><input type="hidden" value="@item.lostFlag" /></td>
                     </tr>
                 }
             </tbody>

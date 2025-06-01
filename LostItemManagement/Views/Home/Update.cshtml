@@ -25,8 +25,8 @@
                 int index = @Model.IndexOf(item); // インデックスを計算
                 <tr>
                     <td>@(index + 1)</td>
-                    <td>@item.lostDate</td>
-                    <td>@item.foundDate</td>
+                    <td>@(item.lostDate?.ToString("yyyy/MM/dd") ?? "")</td>
+                    <td>@(item.foundDate?.ToString("yyyy/MM/dd") ?? "")</td>
                     <td>
                         <input type="text" value="@item.lostItem" class="form-control" />
                     </td>

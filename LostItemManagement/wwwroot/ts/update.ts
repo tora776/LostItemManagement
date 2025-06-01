@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // サーバーに選択されたデータを送信
-        const response = await fetch("/api/index/update", {
+        const response = await fetch("/update/saveupdates", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

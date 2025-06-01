@@ -141,21 +141,49 @@ function initTable() {
 function createTable(data) {
     // テーブルを初期化
     const tableBody = document.querySelector("table tbody");
+    if (!tableBody)
+        return;
     // データをテーブルに追加
-    data.forEach((item) => {
+    data.forEach((item, index) => {
         const row = document.createElement("tr");
+        // チェックボックス列
         const checkboxCell = document.createElement("td");
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.value = item.lostId.toString();
         checkboxCell.appendChild(checkbox);
         row.appendChild(checkboxCell);
-        Object.keys(item).forEach((key) => {
-            const cell = document.createElement("td");
-            cell.textContent = item[key];
-            row.appendChild(cell);
-        });
+        // 紛失ID列（行番号を表示）
+        const idCell = document.createElement("td");
+        idCell.textContent = (index + 1).toString();
+        row.appendChild(idCell);
+        // なくした日付列
+        const lostDateCell = document.createElement("td");
+        lostDateCell.textContent = item.lostDate ? formatDate(item.lostDate) : "";
+        row.appendChild(lostDateCell);
+        // 見つけた日付列
+        const foundDateCell = document.createElement("td");
+        foundDateCell.textContent = item.foundDate ? formatDate(item.foundDate) : "";
+        row.appendChild(foundDateCell);
+        // なくしたもの列
+        const lostItemCell = document.createElement("td");
+        lostItemCell.textContent = item.lostItem;
+        row.appendChild(lostItemCell);
+        // なくした場所列
+        const lostPlaceCell = document.createElement("td");
+        lostPlaceCell.textContent = item.lostPlace;
+        row.appendChild(lostPlaceCell);
+        // なくした詳細な場所列
+        const lostDetailedPlaceCell = document.createElement("td");
+        lostDetailedPlaceCell.textContent = item.lostDetailedPlace;
+        row.appendChild(lostDetailedPlaceCell);
+        // 行をテーブルに追加
         tableBody.appendChild(row);
     });
+}
+// 日付を yyyy/MM/dd 形式にフォーマットする関数
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, "0")}/${date.getDate().toString().padStart(2, "0")}`;
 }
 //# sourceMappingURL=index.js.map
